@@ -1,7 +1,7 @@
 {
   "name": "retriable-download",
   "description": "Retries downloads to a temp file.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Tim Allen <tim@noblesamurai.com>",
   "license": "BSD",
   "main": "src/index.js",
