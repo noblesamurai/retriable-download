@@ -3,7 +3,7 @@
 > Retries downloads to a temp file.
 
 ## Purpose
-Downloads to a temp file and retries on transient errors.
+Downloads to a temp file and retries on (potentially) transient errors.
 ## Usage
 
 ```js
