@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const nock = require('nock');
 const download = require('..');
 
-describe('my thing', function () {
+describe('retriable-download', function () {
   let rejected = false;
   it('retries on 404', function () {
     const retries = 3;
@@ -17,7 +17,6 @@ describe('my thing', function () {
   });
 
   it('retries on transient errors', function () {
-    this.timeout(5000);
     const retries = 3;
     const error = new Error('connection reset punk');
     error.cause = { code: 'ECONNRESET' };
