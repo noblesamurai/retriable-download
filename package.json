@@ -1,10 +1,10 @@
 {
   "name": "retriable-download",
   "description": "Retries downloads to a temp file.",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "author": "Tim Allen <tim@noblesamurai.com>",
   "license": "BSD",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "coverage": "nyc -a -c -r html -r text -r lcov npm test",
     "pretest": "semistandard --env mocha",
@@ -22,18 +22,28 @@
   },
   "engines": {
     "node": "6.x",
-    "npm": "3.x"
+    "npm": "5.x"
   },
-  "dependencies": {},
+  "dependencies": {
+    "request": "^2.83.0",
+    "tempy": "^0.2.1"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "dirty-chai": "^1.2.2",
+    "jsdoc-to-markdown": "~3.0.0",
     "mocha": "~3.3.0",
+    "nock": "^9.1.6",
     "nyc": "^10.1.2",
-    "semistandard": "*",
-    "jsdoc-to-markdown": "~3.0.0"
+    "semistandard": "*"
   },
-  "keywords": [],
+  "keywords": [
+    "download",
+    "retry",
+    "promise",
+    "stream",
+    "temp"
+  ],
   "nyc": {
     "exclude": [
       "coverage",

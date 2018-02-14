@@ -1,25 +1,24 @@
-# Retriable-download [![Build Status](https://secure.travis-ci.org/noblesamurai/retriable-download.png?branch=master)](http://travis-ci.org/noblesamurai/retriable-download) [![NPM version](https://badge-me.herokuapp.com/api/npm/retriable-download.png)](http://badges.enytc.com/for/npm/retriable-download)
+# retriable-download [![Build Status](https://travis-ci.org/noblesamurai/retriable-download.svg?branch=master)](http://travis-ci.org/noblesamurai/retriable-download) [![NPM version](https://badge-me.herokuapp.com/api/npm/retriable-download.png)](http://badges.enytc.com/for/npm/retriable-download)
 
 > Retries downloads to a temp file.
 
 ## Purpose
-- What problem does this module solve? At least a few sentences.
-PLEASE_FILL_IN_HERE
-
+Downloads to a temp file and retries on (potentially) transient errors.
 ## Usage
 
 ```js
-// Several examples of usage.
-// Usually copying and pasting code from the tests and making the code standalone suffices.
-// PLEASE_FILL_IN_HERE
+const dl = require('retriable-download');
+const retries = 3;
+dl(retries, 'http://path/to/file').then((filename) => {
+  //download was saved in tempfile specified by filename
+});
 ```
 
 ## API
 
-PLEASE_FILL_IN_HERE
-
-Note: To regenerate this section from the jsdoc run `npm run docs` and paste
-the output above.
+```js
+module.exports(retries, ...args /*passed to request*/);
+```
 
 ## Installation
 
