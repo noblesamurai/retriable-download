@@ -3,11 +3,16 @@ const tempy = require('tempy');
 const request = require('request');
 const retriableErrorCodes = ['ECONNRESET', 'ETIMEOUT', 'ESOCKETTIMEDOUT', 'ENON2xx'];
 
-module.exports = function retryDownload (retries, ...args) {
-  return new Promise((resolve, reject) => {
-    const filename = tempy.file();
-    const writable = fs.createWriteStream(filename);
+function statusCodeError (code) {
+  const error = new Error(`non 2xx response - ${code}`);
+  error.cause = { code: 'ENON2xx' };
+  return error;
+}
 
+module.exports = function retryDownload (retries, ...args) {
+  const filename = tempy.file();
+  const writable = fs.createWriteStream(filename);
+  return new Promise((resolve, reject) => {
     writable.once('finish', () => {
       return resolve(filename);
     });
@@ -17,8 +22,7 @@ module.exports = function retryDownload (retries, ...args) {
     r.once('response', function (response) {
       if (!/^2[0-9][0-9]$/.exec(response.statusCode)) {
         this.abort();
-        const error = new Error(`non 2xx response - ${response.statusCode}`);
-        error.cause = { code: 'ENON2xx' };
+        const error = statusCodeError(response.statusCode);
         return onError(error);
       }
       r.pipe(writable);
