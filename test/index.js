@@ -4,15 +4,15 @@ const download = require('..');
 
 describe('my thing', function () {
   let rejected = false;
-  it('rejects immediately on 404', function () {
+  it('retries on 404', function () {
     const retries = 3;
-    const scope = nock('http://notthere').get('/thing').reply(404, 'notfound');
+    const scope = nock('http://notthere').get('/thing').times(4).reply(404, 'notfound');
 
-    return download(retries, 'http://notthere/thing').catch(() => {
-      rejected = true;
+    return download(retries, 'http://notthere/thing').catch((err) => {
+      rejected = err;
     }).then(() => {
       expect(scope.isDone()).to.equal(true);
-      expect(rejected).to.equal(true);
+      expect(rejected && rejected.cause && rejected.cause.code).to.equal('ENON2xx');
     });
   });
 

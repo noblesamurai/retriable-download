@@ -1,7 +1,7 @@
 const fs = require('fs');
 const tempy = require('tempy');
 const request = require('request');
-const retriableErrorCodes = ['ECONNRESET', 'ETIMEOUT', 'ESOCKETTIMEDOUT'];
+const retriableErrorCodes = ['ECONNRESET', 'ETIMEOUT', 'ESOCKETTIMEDOUT', 'ENON2xx'];
 
 module.exports = function retryDownload (retries, ...args) {
   return new Promise((resolve, reject) => {
@@ -17,12 +17,16 @@ module.exports = function retryDownload (retries, ...args) {
     r.once('response', function (response) {
       if (!/^2[0-9][0-9]$/.exec(response.statusCode)) {
         this.abort();
-        return reject(new Error(`non 2xx response - ${response.statusCode}`));
+        const error = new Error(`non 2xx response - ${response.statusCode}`);
+        error.cause = { code: 'ENON2xx' };
+        return onError(error);
       }
       r.pipe(writable);
-    }).once('error', function (err) {
+    }).once('error', onError);
+
+    function onError (err) {
       if (retries <= 0 || !retriableErrorCodes.includes(err.cause && err.cause.code)) return reject(err);
       return resolve(retryDownload(retries - 1, ...args));
-    });
+    }
   });
 };
