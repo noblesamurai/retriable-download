@@ -1,6 +1,6 @@
 {
   "name": "retriable-download",
-  "description": "Retries downloads to a temp file.",
+  "description": "Download to a temp file (with retries).  Promise based.",
   "version": "1.0.6",
   "author": "Tim Allen <tim@noblesamurai.com>",
   "license": "BSD",
