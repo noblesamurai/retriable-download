@@ -11,7 +11,7 @@ describe('retriable-download', function () {
     const retries = 3;
     const scope = nock('http://isthere').get('/thing').reply(200, 'found');
 
-    return download(retries, 'http://isthere/thing').catch((err) => {
+    return download('http://isthere/thing', retries).catch((err) => {
       rejected = err;
     }).then((filename) => {
       expect(rejected).to.equal(false);
@@ -25,7 +25,7 @@ describe('retriable-download', function () {
     const retries = 3;
     const scope = nock('http://isthere').get('/thing.nerf').reply(200, 'found');
 
-    return download(retries, 'http://isthere/thing.nerf').catch((err) => {
+    return download('http://isthere/thing.nerf', retries).catch((err) => {
       rejected = err;
     }).then((filename) => {
       expect(rejected).to.equal(false);
@@ -39,7 +39,7 @@ describe('retriable-download', function () {
     const retries = 3;
     const scope = nock('http://notthere').get('/thing').times(4).reply(404, 'notfound');
 
-    return download(retries, 'http://notthere/thing').catch((err) => {
+    return download('http://notthere/thing', retries).catch((err) => {
       rejected = err;
     }).then(() => {
       expect(scope.isDone()).to.equal(true);
@@ -57,7 +57,7 @@ describe('retriable-download', function () {
       .get('/thing')
       .once().reply(200, 'ok');
 
-    return download(retries, 'http://transient/thing').then(() => {
+    return download('http://transient/thing', retries).then(() => {
       expect(scope.isDone(), `still waiting on mocks: ${scope.pendingMocks()}`).to.equal(true);
     });
   });
