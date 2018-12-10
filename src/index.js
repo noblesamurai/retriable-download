@@ -11,13 +11,7 @@ function statusCodeError (code) {
 }
 
 module.exports = function retryDownload (uri, retries = 3, requestOpts = {}) {
-  const filename = tempy.file({ extension: path.extname(uri) });
-  const writable = fs.createWriteStream(filename);
   return new Promise((resolve, reject) => {
-    writable.once('finish', () => {
-      return resolve(filename);
-    });
-
     const r = request({ ...requestOpts, uri });
 
     r.once('response', function (response) {
@@ -26,6 +20,12 @@ module.exports = function retryDownload (uri, retries = 3, requestOpts = {}) {
         const error = statusCodeError(response.statusCode);
         return onError(error);
       }
+      const filename = tempy.file({ extension: path.extname(uri) });
+      const writable = fs.createWriteStream(filename);
+      writable.once('finish', () => {
+        return resolve(filename);
+      });
+
       r.pipe(writable);
     }).once('error', onError);
 
