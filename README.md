@@ -1,4 +1,4 @@
-# retriable-download [![Build Status](https://travis-ci.org/noblesamurai/retriable-download.svg?branch=master)](http://travis-ci.org/noblesamurai/retriable-download) [![NPM version](https://badge-me.herokuapp.com/api/npm/retriable-download.png)](http://badges.enytc.com/for/npm/retriable-download)
+# retriable-download [![Build Status](https://travis-ci.org/noblesamurai/retriable-download.svg?branch=master)]
 
 > Downloads a given uri to a temp file.
 
