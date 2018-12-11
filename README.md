@@ -1,4 +1,4 @@
-# retriable-download [![Build Status](https://travis-ci.org/noblesamurai/retriable-download.svg?branch=master)]
+# retriable-download ![Build Status](https://travis-ci.org/noblesamurai/retriable-download.svg?branch=master)
 
 > Downloads a given uri to a temp file.
 
@@ -16,8 +16,8 @@ dl('http://path/to/file', retries).then((filename) => {
 
 ## API
 
-- retries - an integer number of retries to attempt (default = 3)
-- requestOptions - options provided to `request` module (used under the hood)
+- `retries` - an integer number of retries to attempt (default = 3)
+- `requestOptions` - options provided to `request` module (used under the hood)
 ```js
 module.exports(uri, retries, requestOptions);
 ```
