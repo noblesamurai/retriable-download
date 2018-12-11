@@ -1,6 +1,6 @@
 # retriable-download [![Build Status](https://travis-ci.org/noblesamurai/retriable-download.svg?branch=master)](http://travis-ci.org/noblesamurai/retriable-download) [![NPM version](https://badge-me.herokuapp.com/api/npm/retriable-download.png)](http://badges.enytc.com/for/npm/retriable-download)
 
-> Retries downloads to a temp file.
+> Downloads a given uri to a temp file.
 
 ## Purpose
 Downloads to a temp file and retries on (potentially) transient errors.
@@ -9,15 +9,17 @@ Downloads to a temp file and retries on (potentially) transient errors.
 ```js
 const dl = require('retriable-download');
 const retries = 3;
-dl(retries, 'http://path/to/file').then((filename) => {
-  //download was saved in tempfile specified by filename
+dl('http://path/to/file', retries).then((filename) => {
+  console.log('saved to', filename);
 });
 ```
 
 ## API
 
+- retries - an integer number of retries to attempt (default = 3)
+- requestOptions - options provided to `request` module (used under the hood)
 ```js
-module.exports(retries, ...args /*passed to request*/);
+module.exports(uri, retries, requestOptions);
 ```
 
 ## Installation
