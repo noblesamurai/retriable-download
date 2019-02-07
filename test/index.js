@@ -35,6 +35,20 @@ describe('retriable-download', function () {
     });
   });
 
+  it('should not include the querystring in the filename', function () {
+    const retries = 3;
+    const scope = nock('http://isthere').get('/thing.nerf').query(true).reply(200, 'found');
+
+    return download('http://isthere/thing.nerf?this=should&not=be&here=really', retries).catch((err) => {
+      rejected = err;
+    }).then((filename) => {
+      expect(rejected).to.equal(false);
+      expect(scope.isDone()).to.equal(true);
+      expect(filename).to.match(/\.nerf$/);
+      return access(filename, fs.constants.R_OK);
+    });
+  });
+
   it('retries on 404', function () {
     const retries = 3;
     const scope = nock('http://notthere').get('/thing').times(4).reply(404, 'notfound');
