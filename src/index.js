@@ -3,6 +3,7 @@ const tempy = require('tempy');
 const path = require('path');
 const request = require('request');
 const retriableErrorCodes = ['ECONNRESET', 'ETIMEOUT', 'ESOCKETTIMEDOUT', 'ENON2xx'];
+const url = require('url');
 
 function statusCodeError (code) {
   const error = new Error(`non 2xx response - ${code}`);
@@ -20,7 +21,8 @@ module.exports = function retryDownload (uri, retries = 3, requestOpts = {}) {
         const error = statusCodeError(response.statusCode);
         return onError(error);
       }
-      const filename = tempy.file({ extension: path.extname(uri) });
+      const { pathname } = url.parse(uri);
+      const filename = tempy.file({ extension: path.extname(pathname) });
       const writable = fs.createWriteStream(filename);
       writable.once('finish', () => {
         return resolve(filename);
