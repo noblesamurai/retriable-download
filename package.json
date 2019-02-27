@@ -1,7 +1,7 @@
 {
   "name": "retriable-download",
   "description": "Download to a temp file (with retries).  Promise based.",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "author": "Tim Allen <tim@noblesamurai.com>",
   "license": "BSD",
   "main": "src/index.js",
