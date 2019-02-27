@@ -5,8 +5,8 @@ const request = require('request');
 const retriableErrorCodes = ['ECONNRESET', 'ETIMEOUT', 'ESOCKETTIMEDOUT', 'ENON2xx'];
 const url = require('url');
 
-function statusCodeError (code) {
-  const error = new Error(`non 2xx response - ${code}`);
+function statusCodeError (code, uri) {
+  const error = new Error(`non 2xx response - ${code}: ${uri}`);
   error.cause = { code: 'ENON2xx' };
   return error;
 }
@@ -18,7 +18,7 @@ module.exports = function retryDownload (uri, retries = 3, requestOpts = {}) {
     r.once('response', function (response) {
       if (!/^2[0-9][0-9]$/.exec(response.statusCode)) {
         this.abort();
-        const error = statusCodeError(response.statusCode);
+        const error = statusCodeError(response.statusCode, uri);
         return onError(error);
       }
       const { pathname } = url.parse(uri);
