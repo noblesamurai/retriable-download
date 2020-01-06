@@ -1,7 +1,6 @@
 language: node_js
 before_install: "! grep PLEASE_FILL_IN_HERE README.md"
 node_js:
-  - '8'
   - '10'
   - '12'
 # For the code coverage stuff to work, set your CC_TEST_REPORTER_ID env var.
