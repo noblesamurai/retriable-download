@@ -21,8 +21,8 @@
     "url": "https://github.com/noblesamurai/retriable-download/issues"
   },
   "engines": {
-    "node": "6.x",
-    "npm": "5.x"
+    "node": "^10 || ^12",
+    "npm": "6.x"
   },
   "dependencies": {
     "request": "^2.88.0",
