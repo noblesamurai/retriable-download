@@ -37,6 +37,9 @@
     "nyc": "^10.1.2",
     "semistandard": "*"
   },
+  "files": [
+    "src"
+  ],
   "keywords": [
     "download",
     "retry",
