@@ -20,10 +20,6 @@
   "bugs": {
     "url": "https://github.com/noblesamurai/retriable-download/issues"
   },
-  "engines": {
-    "node": "^10 || ^12",
-    "npm": "6.x"
-  },
   "dependencies": {
     "got": "^11.8.2",
     "multipipe": "^4.0.0",
