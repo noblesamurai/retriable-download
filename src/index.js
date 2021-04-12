@@ -1,8 +1,10 @@
-const fs = require('fs');
-const tempy = require('tempy');
+const got = require('got');
+const pEvent = require('p-event');
 const path = require('path');
-const request = require('request');
-const retriableErrorCodes = ['ECONNRESET', 'ETIMEOUT', 'ESOCKETTIMEDOUT', 'ENON2xx'];
+const pipe = require('multipipe');
+const tempfile = require('tempfile');
+const { URL } = require('url');
+const { createWriteStream } = require('fs');
 
 function statusCodeError (code, uri) {
   const error = new Error(`non 2xx response - ${code}: ${uri}`);
@@ -10,29 +12,23 @@ function statusCodeError (code, uri) {
   return error;
 }
 
-module.exports = function retryDownload (uri, retries = 3, requestOpts = {}) {
-  return new Promise((resolve, reject) => {
-    const r = request({ ...requestOpts, uri });
-
-    r.once('response', function (response) {
-      if (!/^2[0-9][0-9]$/.exec(response.statusCode)) {
-        this.abort();
-        const error = statusCodeError(response.statusCode, uri);
-        return onError(error);
-      }
-      const { pathname } = new URL(uri);
-      const filename = tempy.file({ extension: path.extname(pathname) });
-      const writable = fs.createWriteStream(filename);
-      writable.once('finish', () => {
-        return resolve(filename);
-      });
-
-      r.pipe(writable);
-    }).once('error', onError);
-
-    function onError (err) {
-      if (retries <= 0 || !retriableErrorCodes.includes(err.cause && err.cause.code)) return reject(err);
-      return resolve(retryDownload(uri, retries - 1, requestOpts));
+async function retryDownload (uri, retryCount = 3) {
+  const { pathname } = new URL(uri);
+  const input = got.stream(uri, { throwHttpErrors: false });
+  try {
+    const response = await pEvent(input, 'response');
+    if (!/^2[0-9]{2}$/.exec(response.statusCode)) {
+      input.destroy();
+      throw statusCodeError(response.statusCode, uri);
     }
-  });
-};
+  } catch (error) {
+    if (retryCount > 0) return retryDownload(uri, retryCount - 1);
+    throw error;
+  }
+  const filename = tempfile(path.extname(pathname));
+  const output = createWriteStream(filename);
+  await pipe(input, output);
+  return filename;
+}
+
+module.exports = retryDownload;
