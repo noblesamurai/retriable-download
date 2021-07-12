@@ -4,6 +4,7 @@
 
 ## Purpose
 Downloads to a temp file and retries on (potentially) transient errors.
+
 ## Usage
 
 ```js
@@ -29,6 +30,21 @@ This module is installed via npm:
 ``` bash
 $ npm install retriable-download
 ```
+
+## Contributing
+
+### Prerequisites
+
+```
+$ pip install pre-commit
+```
+
+### Installation
+
+```
+$ pre-commit install --install-hooks
+```
+
 ## License
 
 The BSD License
